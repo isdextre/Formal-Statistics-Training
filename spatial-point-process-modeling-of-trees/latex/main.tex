@@ -1,0 +1,879 @@
+\documentclass[12pt]{article}
+
+% Codificación y lenguaje
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}        % Para idioma español
+\usepackage{csquotes}              % Citas textuales correctas
+\usepackage{lmodern}               % Fuente moderna legible
+\usepackage{caption}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{backcolor}{rgb}{0.97,0.97,0.97}
+
+\lstdefinestyle{Rstyle}{
+    language=R,
+    backgroundcolor=\color{backcolor},
+    commentstyle=\color{codegray}\ttfamily,
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{orange},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    captionpos=b,
+    frame=single,
+    showstringspaces=false
+}
+
+\lstset{style=Rstyle}
+
+
+% Ajustes de traducciones
+\addto\captionsspanish{
+    \renewcommand{\contentsname}{Índice}
+    \renewcommand{\listfigurename}{Lista de Figuras}
+    \renewcommand{\listtablename}{Lista de Tablas}
+    \renewcommand{\figurename}{Figura}
+    \renewcommand{\tablename}{Tabla}
+    \renewcommand{\abstractname}{Resumen}
+}
+
+% Márgenes y geometría
+\usepackage[a4paper, margin=2.5cm]{geometry}
+
+% Matemáticas
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{mathtools}             % Extensión de amsmath
+\usepackage{bm}                    % Letras en negrita para símbolos
+\usepackage{siunitx}               % Para unidades y notación científica
+\sisetup{output-decimal-marker={,}}  % Coma decimal (estilo español)
+
+% Gráficos e imágenes
+\usepackage{graphicx}
+\usepackage{float}                 % Para posicionar figuras con [H]
+\usepackage{subcaption}           % Subfiguras
+
+% Tablas avanzadas
+\usepackage{booktabs}             % Tablas elegantes
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tabularx}
+
+% Bibliografía (con BibTeX o BibLaTeX)
+\usepackage[backend=bibtex, style=apa, sorting=nyt]{biblatex}
+\addbibresource{referencias.bib}   % Cambia el nombre si usas otro .bib
+
+% Hipervínculos y navegación
+\usepackage[hidelinks]{hyperref}   % Enlaces sin color, más limpio
+\usepackage{url}
+
+% Código fuente (opcional)
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{colortbl} % ¡Este es el que activa \cellcolor en tablas!
+\definecolor{viflow}{RGB}{255,235,235}
+\definecolor{vifmid}{RGB}{255,180,180}
+\definecolor{vifhigh}{RGB}{255,100,100}
+\definecolor{vifmax}{RGB}{255,0,0}
+\definecolor{tolhigh}{RGB}{220,255,220}   % verde claro
+\definecolor{tolmid}{RGB}{180,240,180}    % verde medio
+\definecolor{tollow}{RGB}{255,220,180}    % naranja claro
+\definecolor{tolvlow}{RGB}{255,180,120}   % naranja fuerte
+\definecolor{tolcrit}{RGB}{255,100,100}   % rojo crítico
+
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  frame=single,
+  breaklines=true,
+  backgroundcolor=\color{gray!10},
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray!60},
+  stringstyle=\color{purple},
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=5pt
+}
+
+% Otros útiles
+\usepackage{enumitem}             % Listas personalizadas
+\usepackage{titlesec}             % Personalizar títulos de secciones
+\usepackage{fancyhdr}             % Encabezados/pies de página
+\usepackage{caption}              % Control sobre captions
+\usepackage{microtype}            % Mejor espaciado tipográfico
+
+% Encabezado/pie de página opcional
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\lhead{Estadística Espacial}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Título (puedes usar \maketitle o una portada personalizada)
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    {\Large\bfseries Universidad Nacional de Ingeniería\par}
+    \vspace{0.3cm}
+    {\large Escuela Profesional de Estadística\par}
+    \vspace{2cm}
+    
+    {\LARGE\bfseries Análisis Espacial de la Distribución de Árboles Beilschmiedia mediante Procesos Puntuales en R\par}
+
+% ----------------- logo de la UNI-------------------------
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Imgs/Uni-logo_transparente_granate.png} 
+    \label{fig:mi-imagen}
+\end{figure}
+% ------------------------------------------------------------
+\vspace{0.5cm}
+
+    \textbf{Autor:}\\
+    Sofía Dextre Simangas\\ %
+    
+\vspace{0.5cm}
+
+    \vfill
+    \textbf{Curso:} Estadística Espacial\\
+    \textbf{Docente:} Erick Chacón
+
+    \vspace{1.5cm}
+    Lima, Perú\\
+    Julio 2025
+\end{titlepage}
+
+% ---------- tabla de contenido-------------------------------------
+% Índice
+\tableofcontents
+\newpage  % para que el contenido comience en nueva página
+
+\section{Resumen}
+
+
+\noindent Este trabajo realiza un análisis estadístico espacial de la distribución de árboles de la especie \textit{Beilschmiedia pendula} en un bosque tropical ubicado en la Isla Barro Colorado, Panamá. Se utilizó la información contenida en los conjuntos de datos \texttt{bei} y \texttt{bei.extra}, los cuales registran la ubicación de los árboles y covariables como la elevación y el gradiente del terreno.
+\vspace{0.5cm}
+\noindent Inicialmente, se efectuó un análisis exploratorio del patrón de puntos, así como de las covariables espaciales. Posteriormente, se aplicaron pruebas de aleatoriedad espacial como la \textit{función K de Ripley} y la \textit{prueba del cuadrante}, las cuales revelaron la existencia de un patrón no completamente aleatorio, indicando inhomogeneidad espacial.
+\vspace{0.5cm}
+\noindent Se estimó la función de intensidad del proceso puntual. Se evaluaron tres modelos: uno con interacción entre covariables, otro con transformaciones funcionales, y uno que contiene ambos. La comparación de modelos se realizó mediante el log-verosimilitud y el criterio de información de Akaike (AIC), concluyéndose que el modelo completo presentó el mejor desempeño.
+% -------------------- INTRODUCCIÓN----------------------------
+\section{Introducción}
+
+{\setlength{\parindent}{0pt}
+ \setlength{\parskip}{0.7em}
+
+Los procesos espaciales puntuales permiten modelar eventos que ocurren en ubicaciones específicas dentro de una región geográfica. Este enfoque es útil en disciplinas como la ecología o la epidemiología, donde la posición de los eventos revelan patrones que son útiles para estudios.
+
+En este trabajo se analiza la distribución espacial de árboles de la especie Beilschmiedia pendula en un bosque tropical de la isla Barro Colorado, Panamá. Para ello, se utilizan herramientas estadísticas del paquete \texttt{spatstat} en R, con el fin de explorar la intensidad, la dependencia espacial y la relación con covariables ambientales como la elevación y la pendiente del terreno.
+
+}
+
+
+
+\subsection{Justificación}
+
+{\setlength{\parindent}{0pt}
+ \setlength{\parskip}{0.7em}
+
+El análisis de procesos puntuales espaciales permite modelar fenómenos donde la ubicación de los eventos es fundamental. En ecología, este enfoque es esencial para entender patrones de distribución, interacción, influencia de factores ambientales, etc.
+
+Este estudio se justifica por la aplicación integral de conceptos teóricos como la intensidad, estacionariedad, isotropía, y herramientas como la función $K$, el test de aleatoriedad espacial (CSR), y la estimación de intensidad mediante kernels. Adicionalmente, se consideran modelos puntuales como los procesos de Poisson.
+
+El uso del dataset \texttt{bei}, junto con el paquete \texttt{spatstat} en R, proporciona un entorno adecuado para aplicar los conceptos aprendidos en clase.
+}
+
+
+\subsection{Objetivo general}
+
+{\setlength{\parindent}{0pt}
+ \setlength{\parskip}{0.7em}
+
+Analizar el patrón espacial de los árboles de la especie \textit{Beilschmiedia pendula} en un bosque tropical mediante técnicas de estadística espacial, aplicando modelos de procesos puntuales
+}
+
+\subsection{Objetivos específicos}
+
+{\setlength{\parindent}{0pt}
+ \setlength{\parskip}{0.7em}
+
+\begin{itemize}
+  \item Describir el patrón espacial de los árboles utilizando herramientas gráficas y estimación de intensidad.
+  \item Evaluar la hipótesis de aleatoriedad espacial completa (CSR) mediante pruebas estadísticas.
+  \item Analizar la dependencia espacial entre eventos utilizando funciones de segundo orden como la función $K$ y la función de correlación de pares.
+  \item Incorporar covariables ambientales en el modelo.
+\end{itemize}
+}
+
+% --------------------------------------------------------------
+\section{Marco teórico}
+\subsection{Conceptos generales}
+
+
+{\setlength{\parindent}{0pt}
+ \setlength{\parskip}{0.7em}
+
+Un proceso puntual espacial es un proceso estocástico cuyas realizaciones consisten en un conjunto de puntos ubicados en una región \( D \subset \mathbb{R}^2 \). Cada realización puede representarse como:
+
+\[
+s = \{s_1, s_2, \dots, s_n\}, \quad s_i \in D
+\]
+
+donde cada \( s_i \) indica la posición de un evento en el espacio. El conjunto \( D \) representa el dominio o región de observación, y suele ser una ventana rectangular o una región delimitada del plano.
+
+Para el análisis de estos procesos, se utiliza la \textit{medida de conteo} \( N(A) \), definida como el número de puntos contenidos en una subregión \( A \subset D \):
+
+\[
+N(A) = \text{número de eventos en la región } A
+\]
+
+A partir de esta medida, se definen funciones que permiten caracterizar la estructura espacial del patrón.
+
+La función de intensidad de primer orden se define como:
+
+\[
+\lambda(s) = \lim_{|ds| \to 0} \frac{\mathbb{E}[N(ds)]}{|ds|}
+\]
+
+donde \( \lambda(s) \) representa la densidad esperada de eventos por unidad de área alrededor del punto \( s \). Si el proceso es estacionario, la intensidad es constante en todo el dominio: \( \lambda(s) = \lambda \).
+
+Estas herramientas permiten describir la forma en que los eventos se distribuyen en el espacio, ya sea de forma aleatoria, agrupada o inhibida. Este tipo de análisis es relevante en diversas disciplinas como ecología, epidemiología, geografía, entre otras.
+}
+
+
+\subsection{Evaluación de agrupamiento espacial}
+\noindent El análisis del patrón espacial comienza con una evaluación de aleatoriedad espacial, usando herramientas como la función K de Ripley y el test de cuadrantes, que nos permitirán verificar si el proceso presenta  aleatoriedad, agrupamiento o dispersión para posteriormente decidir qué modelo de intensidad utilizar. \\
+\vspace{1cm}
+
+\noindent La función \( K(t) \) describe la estructura de segundo orden de un proceso puntual estacionario e isotrópico. Se define como:
+
+\[
+K(t) = \frac{1}{\lambda} \mathbb{E}[N_0(t)]
+\]
+
+donde:
+\begin{itemize}
+  \item \( \lambda \) es la intensidad del proceso 
+  \item \( N_0(t) \) es el número de eventos dentro de una distancia \( t \)
+\end{itemize}
+
+\noindent En el caso de un \textbf{proceso de Poisson homogéneo} (completa aleatoriedad espacial), se cumple que:
+
+\[
+K(t) = \pi t^2
+\]
+
+La comparación con la curva teórica \( \pi t^2 \) permite interpretar el patrón espacial:
+
+\begin{itemize}
+  \item Si \( \hat{K}(t) > \pi t^2 \): hay \textbf{agrupamiento}.
+  \item Si \( \hat{K}(t) < \pi t^2 \): hay \textbf{inhibición}
+  \item Si \( \hat{K}(t) \approx \pi t^2 \): se acepta \textbf{aleatoriedad}
+\end{itemize}
+
+\noindent{\textbf{Test de Cuadrantes}}
+
+\noindent Es una prueba de homogeneidad espacial que divide el área \( A \) en \( m \) subregiones (cuadrantes) y compara el conteo de eventos observados \( n_i \) con el valor esperado bajo aleatoriedad \( e_i = \frac{n}{m} \).
+
+\noindent El estadístico es:
+
+\[
+X^2 = \sum_{i=1}^{m} \frac{(n_i - e_i)^2}{e_i}
+\]
+
+\noindent Bajo la hipótesis nula \( H_0 \) (proceso homogéneo), se tiene:
+
+\[
+X^2 \sim \chi^2_{m - 1}
+\]
+
+\noindent La decisión se basa en el valor \( p \):
+\begin{itemize}
+  \item Si \( p < 0.05 \), se rechaza \( H_0 \): existe \textbf{variación espacial significativa}.
+  \item Si \( p \geq 0.05 \), no se rechaza \( H_0 \): el patrón es \textbf{compatible con aleatoriedad}.
+\end{itemize}
+
+
+\subsection{Estimación de intensidad}
+
+\noindent La estimación de \( \lambda(s) \) se vuelve necesaria cuando se ha descartado la hipótesis de aleatoriedad espacial (CSR), como ocurre cuando los resultados de pruebas como el test de cuadrantes o la función \( K \) de Ripley muestran agrupamiento o inhibición. En estos casos, se asume que \( \lambda(s) \) no es constante, y se procede a estimarla. \\
+\vspace{0.5cm}
+
+\noindent{\textbf{Estimación No Paramétrica (Método Kernel)}}
+
+\vspace{0.5cm}
+\noindent Una forma común de estimar la intensidad es mediante suavizado kernel, donde la estimación en el punto \( s \) se calcula como:
+
+\[
+\hat{\lambda}(s) = \sum_{i=1}^{n} \frac{1}{h^2} K\left( \frac{\| s - s_i \|}{h} \right)
+\]
+
+donde:
+\begin{itemize}
+    \item \( s_i \) son los puntos del patrón observado,
+    \item \( K(\cdot) \) es una función núcleo 
+    \item \( h \) es el ancho de banda (controla el grado de suavizado).
+\end{itemize}
+
+\noindent Este método produce un mapa continuo de intensidad, útil para detectar zonas de alta o baja concentración de eventos. \\
+\vspace{0.5cm}
+
+\noindent{\textbf{Estimación Paramétrica (Modelos de Poisson Inhomogéneo)}}
+
+\noindent La intensidad puede modelarse como una función log-lineal:
+
+\[
+\lambda(s) = \exp(\beta_0 + \beta_1 z_1(s) + \cdots + \beta_p z_p(s))
+\]
+
+donde:
+\begin{itemize}
+    \item \( z_j(s) \) son las covariables
+    \item \( \beta_j \) son coeficientes estimados 
+\end{itemize}
+
+\noindent{\textbf{Si el proceso no es homogéneo} se debe estimar \( \lambda(s) \) usando métodos no paramétricos o modelos con covariables.
+
+%----------------------------------------------------------
+\section{Metodología y Resultados}
+\subsection{Base de datos}
+
+\noindent Este estudio utiliza las bases \texttt{bei} y \texttt{bei.extra} del paquete \texttt{spatstat.data} en R, que corresponden a un bosque tropical ubicado en la Isla Barro Colorado, Panamá.
+
+\vspace{0.3cm}
+
+\noindent La base \texttt{bei}, de clase ppp, contiene la ubicación de 3605 árboles de la especie Beilschmiedia pendula en una región rectangular de 1000 × 500 metros, con coordenadas en metros.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.2\textwidth]{Imgs/base_bei.png}
+    \label{fig:etiqueta}
+\end{figure}
+
+\noindent La base \texttt{bei.extra} incluye covariables espaciales en formato de imagen:
+\begin{itemize}
+  \item \texttt{elev}: elevación del terreno.
+  \item \texttt{grad}: gradiente de elevación o pendiente.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Imgs/base_bei_extra.png}
+    \label{fig:etiqueta}
+\end{figure}
+
+\subsection{Software y herramientas utilizadas }
+
+Para el análisis estadístico de los procesos puntuales espaciales, se utilizó el software R junto con paquetes especializados del entorno \texttt{spatstat}. Estas herramientas permitieron representar, visualizar, modelar y analizar los patrones espaciales, así como ajustar modelos de intensidad y realizar inferencias. 
+
+En el Anexo \ref{anexo:paquetes}, se detalla la lista completa de paquetes, funciones y clases utilizadas, junto con su propósito en el estudio.
+
+
+
+\subsection{Análisis exploratorio}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Imgs/disbei.pdf}
+\end{figure}
+\noindent La distribución espacial de los árboles no es homogénea pues hay zonas con mayor agregación lo que sugiere clusters.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imgs/evelaciondelterreno.pdf} 
+\end{figure}
+\noindent La elevación del terreno está entre los 120 y 150 cm, además se ve que hay una zona elevada.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imgs/gradiente de elevacion.pdf} 
+\end{figure}
+\noindent Este gráfico nos permite ver la pendiente de elevación, a menos pendiente el color es más oscuro, se puede ver que en general las pendientes son bajas al centro (lo que sugiere un área plana) y a los extremos hay mayor pendiente
+
+\noindent Habiendo visto las distribuciones básicas nos preguntamos a qué tipo de proceso nos estamos enfrentando, para eso es necesario hacer los test de aleatoriedad.
+
+
+\subsection{Test de aleatoriedad}
+\noindent{\textbf{Test de Cuadrantes}}
+
+\noindent El test de cuadrantes, divide el área de estudio en una grilla rectangular de subregiones, para este caso usaremos 5x5, es decir dividiremos la data en 25 regillas, es ideal tener un balance ya que con muy pocas celdas no se detecta variación y con muchas celdas la prueba puede ser inestable
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Imgs/test_cuadrante.png} 
+\end{figure}
+
+\noindent{\textbf{Hipótesis}}
+\begin{itemize}
+  \item \( H_0 \): El patrón espacial sigue un proceso de Poisson homogéneo (CSR).
+  \item \( H_1 \): El patrón espacial no es homogéneo; hay agrupamiento o inhibición.
+\end{itemize}
+
+\[
+X^2 = \sum_{i=1}^{m} \frac{(n_i - e_i)^2}{e_i}, \quad \text{donde } e_i = \frac{n}{m}
+\]
+
+\noindent{\textbf{Resultado:}}
+\[
+X^2 = 2009.9, \quad \text{gl} = 24, \quad p\text{-valor} < 2.2 \times 10^{-16}
+\]
+
+\noindent Dado que el valor del estadístico es alto y el valor \( p \) es mucho menor al nivel de significancia convencional (\( \alpha = 0.05 \)), se rechaza la hipótesis nula por lo que el patrón no es homogéneo.
+\vspace{1cm}
+\noindent Además obtenemos el cuadro
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Imgs/test_cuadrante.pdf} 
+\end{figure}
+
+\noindent En la que cada celda representa el observado, esperado y residuo. Se pueden ver residuos muy altos sobre todo en los bordes, que indican más puntos de lo esperado. \\
+\vspace{1cm
+
+\noindent{\textbf{Función K de Ripley}}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Imgs/funcion_ripley_1.pdf} 
+\end{figure}
+
+\noindent El gráfico de la función \( K(r) \) muestra la acumulación esperada de puntos vecinos a distintas distancias \( r \), con el fin de evaluar el patrón de puntos
+
+\begin{itemize}
+    \item \textbf{Línea negra }: representa la estimación empírica \( \hat{K}_{\text{bord}}(r) \), obtenida del patrón real de puntos.
+    \item \textbf{Línea roja}: representa la función teórica \( K_{\text{pois}}(r) = \pi r^2 \), correspondiente al modelo de aleatoriedad espacial completa (CSR) bajo un proceso de Poisson homogéneo.
+\end{itemize}
+
+\noindent En el gráfico generado, la curva empírica \( \hat{K}_{\text{bord}}(r) \) se encuentra por encima de \( \pi r^2 \)  lo que indica que el patrón de puntos presenta agrupamiento espacial.
+
+%Prueba de cuadrantes (quadrat.test)
+%Función K de Ripley (Kest)
+
+\noindent{\textbf{Agregando bandas de simulación}}
+
+\noindent Además es necesario saber si dicha diferencia es significativa, esto lo podemos saber gracias a las bandas de simulación
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Imgs/Funcion_K_ripleuy_2.pdf} 
+\end{figure}
+
+\noindent El gráfico muestra la función \( \hat{K}_{obs}(r) \) estimada a partir del patrón de puntos observado, comparada con:
+
+\begin{itemize}
+    \item La función teórica \( K_{theo}(r) = \pi r^2 \) de un proceso homogéneo
+    \item Una colección de funciones \( \hat{K}_i(r) \) generadas a partir de simulaciones
+\end{itemize}
+
+\noindent La curva empírica \( \hat{K}_{obs}(r) \) se encuentra  por encima de las curvas generadas por las simulaciones. Esto indica que, para cada distancia \( r \), el número de puntos vecinos es mayor al que se esperaría bajo un modelo de aleatoriedad completa.
+\\
+\vspace{0.5cm}
+
+\noindent Dado que \( \hat{K}_{obs}(r) \) se ubica fuera del rango de variabilidad generado por las simulaciones, se concluye que la diferencia es estadísticamente significativa.
+
+\subsection{Estimación de la función de intensidad}
+
+\noindent{\textbf{Método Kernel}} \\
+\vspace{0.5cm}
+\noindent La estimación de intensidad nos puede decir cómo varía la intensidad de eventos en el espacio
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imgs/kernel_smoothing.pdf} 
+\end{figure}
+
+\noindent La estimación de la función de intensidad \( \lambda(s) \) genera un mapa el cual evidencia una distribución claramente no homogénea como lo habíamos visto antes, en la que se identifican zonas con alta concentración de eventos y otras con baja o nula intensidad
+
+\vspace{0.5cm}
+
+\noindent{\textbf{Estimación paramétrica de intensidad}} 
+\vspace{0.5cm}
+
+\noindent Se ajustó un modelo de proceso puntual de Poisson inhomogéneo con intensidad espacial \( \lambda(s) \) modelada como una función log-lineal de dos covariables espaciales: la elevación del terreno (\texttt{elev}) y el gradiente o pendiente (\texttt{grad}).
+
+\noindent Del cual obtendremos:
+\[
+\log \lambda(s) = \beta_0 + \beta_1 \cdot \texttt{elev}(s) + \beta_2 \cdot \texttt{grad}(s)
+\]
+
+Donde:
+\begin{itemize}
+    \item \( \lambda(s) \): intensidad del proceso en la ubicación espacial \( s \),
+    \item \( \beta_0 \): intercepto del modelo,
+    \item \( \beta_1 \), \( \beta_2 \): coeficientes asociados a las covariables.
+\end{itemize}
+
+\noindent Realizando la estimación: 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imgs/intensidad_estimada.png} 
+\end{figure}
+
+\begin{itemize}
+    \item El coeficiente \( \hat{\beta}_1 = 0.0214 \) indica que, por cada unidad adicional de elevación, la intensidad esperada del proceso aumenta en aproximadamente un \( 2.17\% \) (ya que \( e^{0.0214} \approx 1.0217 \)).
+    \item El coeficiente \( \hat{\beta}_2 = 5.8465 \) indica quepor cada unidad adicional de pendiente, la intensidad se multiplica por un factor de aproximadamente \( 346 \) (ya que \( e^{5.8465} \approx 346 \)).
+    \item Ambos coeficientes son estadísticamente significativos con valores \( p < 0.001 \).
+\end{itemize}
+
+\noindent  En particular, la densidad de eventos (árboles) tiende a ser mayor en zonas con mayor elevación y, especialmente, con mayor gradiente del terreno. 
+
+\noindent Podemos visualizar la intensidad esperada revisando el gráfico del cálculo de los valores esperados en cada punto a partir del modelo
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imgs/intensidad_estimada.pdf} 
+\end{figure}
+
+\noindent Por lo visto, el modelo espera más árboles en cierta zona (la parte más amarilla) además es más frecuente ver mayor intensidad en los bordes (donde hay pendiente) que en el área plana.
+
+\subsection{Diagnóstico del modelo}
+
+\noindent Podemos hacer un diagnóstico de nuestro modelo de intensidad previamente calculado con diagnose.ppm(), este gráfico evalúa si el modelo explica bien los datos.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imgs/diagnostico_del_modelo.pdf} 
+\end{figure}
+
+\begin{itemize}
+  \item \textbf{Mapa de residuos crudos:} muestra los residuos puntuales superpuestos al patrón de árboles. Se observan zonas con residuos más intensos (más oscuros), lo cual indica que el modelo no ajusta igualmente bien en todo el espacio.
+
+  \item \textbf{Suma acumulada de residuos en $y$ :} la línea negra se desvía de las bandas de confianza, lo que indica que el modelo no explica adecuadamente la variación vertical.
+
+  \item \textbf{Suma acumulada de residuos en $x$ :} presenta una desviación considerable fuera de las bandas de confianza, sugiriendo que el modelo presenta mal ajuste en la dirección horizontal.
+
+  \item \textbf{Mapa de residuos suavizados:} muestra las regiones donde el modelo sobrestima (áreas azules) o subestima (áreas rojas) la intensidad. El modelo tiende a subestimar la presencia de árboles en ciertas zonas y a sobreestimarla en otras.
+\end{itemize}
+
+\noindent El modelo ajustado con las covariables elevación y gradiente captura parcialmente el patrón espacial
+
+
+\subsection{Interacciones y transformaciones}
+
+\noindent Por lo visto anteriormente, nuestro modelo no predice del todo, por lo que sería bueno probar transformaciones e interacciones.
+\\
+
+\vspace{0.5cm}
+\noindent El uso de interacciones permite modelar efectos conjuntos entre covariables, es decir, capturar situaciones en las que el efecto de una covariable sobre la intensidad depende del nivel de otra. 
+\\
+
+\vspace{0.5cm}
+\noindent Por otro lado, las transformaciones no lineales permiten ajustar relaciones que no siguen una forma lineal simple. 
+\vspace{1cm}
+
+\noindent{\textbf{Modelo con interacciones}} 
+\vspace{1cm}
+
+\[
+\log(\lambda(s)) = \beta_0 + \beta_1 \cdot \text{elev}(s) + \beta_2 \cdot \text{grad}(s) + \beta_3 \cdot \text{elev}(s) \cdot \text{grad}(s)
+\]
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imgs/Modelo_interaccion.png} 
+\end{figure}
+
+\begin{itemize}
+  \item El coeficiente de \texttt{elev} es negativo pero no significativo ($p > 0.05$), sugiriendo un efecto débil o inexistente por sí solo.
+  \item \texttt{grad} tiene un efecto negativo significativo, indicando que áreas con mayor pendiente presentan menor intensidad de eventos.
+  \item La interacción \texttt{elev:grad} es positiva y altamente significativa ($p < 0.001$), lo cual sugiere que el efecto negativo de la pendiente se atenúa en zonas de mayor elevación.
+\end{itemize}
+
+\noindent Estos resultados apoyan el uso de un modelo con interacción
+\vspace{1cm}
+
+\noindent{\textbf{Modelo con transformaciones}} 
+\vspace{1cm}
+
+\[
+\log(\lambda(s)) = \beta_0 + \beta_1 \cdot \text{elev}^2(s) + \beta_2 \cdot \sqrt{\text{grad}(s)}
+\]
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imgs/Modelo_transformacion.png} 
+\end{figure}
+
+\begin{itemize}
+  \item La covariable \texttt{elev} fue transformada al cuadrado. Su coeficiente positivo y significativo sugiere que la intensidad de eventos aumenta con la elevación a tasas crecientes.
+  \item El gradiente \texttt{grad} fue transformado mediante raíz cuadrada. Su coeficiente es grande y positivo, indicando que zonas con mayor pendiente tienden a concentrar más eventos.
+  \item Todos los términos fueron estadísticamente significativos ($p < 0.001$), lo que respalda la inclusión de estas transformaciones.
+\end{itemize}
+
+El modelo capta relaciones no lineales entre la intensidad del proceso y las covariables topográficas del terreno, proporcionando un ajuste más flexible que el modelo lineal simple.
+
+\vspace{1cm}
+\noindent{\textbf{Modelo con interacciones y transformaciones}} 
+\vspace{1cm}
+
+\[
+\log(\lambda(s)) = \beta_0 + \beta_1 \cdot \text{elev}^2(s) + \beta_2 \cdot \sqrt{\text{grad}(s)} + \beta_3 \cdot \text{elev}^2(s) \cdot \sqrt{\text{grad}(s)}
+\]
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imgs/Modelo_transformacion.png} 
+\end{figure}
+
+\begin{itemize}
+  \item \textbf{Elevación al cuadrado (elev²)}: Tiene un efecto negativo; por sí sola, una mayor elevación disminuye la intensidad.
+  \item \textbf{Raíz cuadrada del gradiente (√grad)}: También tiene un efecto negativo individual sobre la intensidad.
+  \item \textbf{Interacción elev² × √grad}: Presenta un efecto positivo, indicando que cuando ambas covariables son altas simultáneamente, la intensidad puede incrementarse, compensando sus efectos individuales.
+\end{itemize}
+
+\noindent Todos los coeficientes fueron estadísticamente significativos ($p < 0.001$), lo que sugiere que la inclusión de esta interacción y transformaciones no lineales proporciona un ajuste más realista del proceso espacial.
+\subsubsection{Comparación de los 3 modelos}
+
+A continuación, se presentan los mapas de intensidad estimada bajo tres modelos distintos: interacción, transformación y modelo completo (transformación + interacción). Se comparan visualmente para evaluar cuál representa mejor el patrón espacial
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imgs/predicciones_intensidad_3_modelos.png} 
+\end{figure}
+
+\begin{itemize}
+  \item \textbf{Modelo con interacción}: Muestra una concentración marcada de alta intensidad (zonas en color amarillo) principalmente en el borde derecho inferior. 
+
+  \item \textbf{Modelo con transformación}: Exhibe un patrón más  generalizado, capturando relaciones no lineales entre las covariables y la intensidad.
+
+  \item \textbf{Modelo completo (transformación + interacción)}: Combina ambos efectos, mostrando una mayor precisión en la detección de zonas con alta intensidad esperada. Se observan patrones más definidos que coinciden mejor con la distribución real de los puntos.
+
+\end{itemize}
+
+\subsubsection{Comparación Log Likehood}
+
+\noindent A continuación, se presentan los valores del logaritmo de la verosimilitud (logLik) para los tres modelos ajustados:
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Imgs/Log_likehood_3_modelos.png} 
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Modelo} & \textbf{logLik} & \textbf{Grados de libertad (df)} \\
+\hline
+Modelo con interacción & -21110.62 & 4 \\
+Modelo con transformación & -21078.36 & 3 \\
+Modelo completo (transformación + interacción) & \textbf{-21037.23} & 4 \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\vspace{0.5em}
+
+Se observa que el \textbf{modelo completo} presenta el mayor valor de log-verosimilitud (es decir, el menos negativo), lo cual indica un mejor ajuste a los datos observados.
+
+\subsubsection{AIC}
+
+\noindent Para comparar los modelos ajustados, se utilizó el criterio de información de Akaike (AIC), cuyos resultados se detallan a continuación:
+
+\begin{itemize}
+    \item Modelo con interacción: AIC = 42229.24
+    \item Modelo con transformación: AIC = 42162.72
+    \item Modelo completo (interacción + transformación): AIC = 42082.46
+\end{itemize}
+
+\noindent Dado que el modelo completo presenta el menor valor de AIC, se concluye que este ofrece el mejor balance entre ajuste y complejidad. Por lo tanto, es el modelo preferido para describir la intensidad del patrón de puntos en función de las covariables topográficas.
+
+\subsection{Simulación}
+
+\noindent Una vez ajustado el modelo de Poisson inhomogéneo con transformaciones cuadráticas e interacciones, se realizó una simulación del proceso puntual utilizando la función \texttt{simulate()} de \texttt{spatstat}. Esta función genera una realización aleatoria del patrón espacial según la intensidad estimada por el modelo ajustado.
+\vspace{0.5cm}
+\noindent El objetivo de esta simulación es ver si el modelo es capaz de replicar estructuras espaciales similares a las observadas en los datos.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imgs/simulacion.pdf} 
+\end{figure}
+
+ \noindent Se observa que el modelo logra capturar la variación global de la intensidad en el espacio, reproduciendo regiones con mayor densidad de puntos y otras más dispersas. Sin embargo, la simulación presenta una distribución más suave, mientras que el patrón real contiene zonas de vacíos y agrupamientos más marcados. 
+% ----------------------------------------------------
+% --------------------------------------------------
+% -------------------------------------------------
+\section*{Conclusiones}
+
+\noindent
+El presente trabajo tuvo como objetivo analizar el patrón espacial de árboles en una región geográfica utilizando procesos puntuales y estimar la función de intensidad asociada a covariables topográficas. Para ello, se emplearon herramientas estadísticas del marco de los procesos puntuales espaciales.
+
+\vspace{0.8em}
+
+\noindent
+En primer lugar, los análisis exploratorios y las pruebas de aleatoriedad (como la función K de Ripley y el test de cuadrantes) permitieron concluir que el patrón de puntos no sigue un proceso de Poisson homogéneo, evidenciando agrupamientos y variación espacial significativa en la intensidad del proceso. Esto justificó la necesidad de un modelo de Poisson inhomogéneo.
+
+\vspace{0.8em}
+
+\noindent
+Posteriormente, se realizaron estimaciones no paramétricas de la función de intensidad mediante \textit{kernel smoothing}, las cuales permitieron visualizar zonas de alta y baja intensidad y luego, se ajustaron modelos paramétricos de Poisson inhomogéneo incorporando covariables como la elevación y el gradiente del terreno, considerando además transformaciones e interacciones. El modelo final seleccionado incluyó una transformación cuadrática de la elevación e interacción con la raíz cuadrada del gradiente, mostrando los mejores indicadores.
+
+\vspace{0.8em}
+
+\noindent
+Al comparar la simulación de patrones con la data real se ve que modelo logra capturar adecuadamente la variación espacial observada.
+
+\vspace{0.8em}
+
+\noindent
+En conclusión, se comprobó que variables topográficas como la elevación y el gradiente influyen significativamente en la distribución espacial de los árboles. El modelo ajustado no solo permite explicar dicha distribución, sino que también podría utilizarse para predecir zonas con mayor densidad esperada en escenarios similares. 
+
+%----------------------------------------------------
+\section{Apéndices}
+
+\appendix
+\subsection{Paquetes y funciones utilizadas en R}
+\label{anexo:paquetes}
+
+\begin{table}[H]
+\centering
+\caption{Paquetes y funciones utilizadas en R}
+\begin{tabular}{|l|p{10.5cm}|}
+\hline
+\textbf{Paquete} & \textbf{Función/Clase: para qué sirve} \\
+\hline
+\texttt{spatstat.geom} & 
+\texttt{ppp}: Representa un patrón puntual espacial; se usa para modelar la localización de los árboles.\\
+& \texttt{owin}: Define la ventana de observación espacial; establece los límites espaciales del área de estudio.\\
+& \texttt{im}: Representa imágenes espaciales (pixeladas); se usa con covariables como elevación y gradiente. \\
+\hline
+\texttt{spatstat.core} & 
+\texttt{Kest}: Estima la función $K(r)$ de Ripley.\\
+& \texttt{pcf}: Calcula la función de correlación por pares $g(r)$.\\
+& \texttt{density.ppp}: Estima la intensidad mediante el método de núcleo (kernel).\\
+& \texttt{envelope}: Genera envolventes simuladas (Monte Carlo) para evaluar hipótesis como el HPP.\\
+\hline
+\texttt{spatstat.explore} & 
+\texttt{quadrat.test}: Aplica la prueba del cuadrante (Chi-cuadrado).\\
+& \texttt{Gest}: Estima la función $G(r)$ (vecino más cercano).\\
+& \texttt{Fest}: Estima la función $F(r)$ (punto aleatorio al evento más cercano).\\
+& \texttt{Jest}: Estima la función $J(r)$ combinando $F$ y $G$. \\
+\hline
+\texttt{spatstat.model} & 
+\texttt{ppm}: Ajusta modelos de Poisson no homogéneos con covariables.\\
+& \texttt{predict}: Realiza predicciones de la intensidad estimada.\\
+& \texttt{diagnose.ppm}: Evalúa gráficamente el ajuste del modelo.\\
+\hline
+\texttt{spatstat.data} & 
+\texttt{bei}, \texttt{bei.extra}: Datos de localización de árboles y covariables espaciales como elevación y gradiente. \\
+\hline
+\texttt{maptools} & 
+\texttt{as.owin}, \texttt{readShapePoly}: Conversión/importación de datos espaciales (shapefiles). \\
+\hline
+\end{tabular}
+\end{table}
+
+\newpage
+\section{Anexo: Código fuente en R}
+
+\begin{lstlisting}[language=R, caption={Análisis espacial de la base \texttt{bei}}]
+# ----------------------------------
+# Curso: Estadística Espacial
+# Alumna: Sofia Dextre
+# Descripción: Este trabajo es para la PC3 del curso, contiene el análisis
+#              puntual espacial de la data bei y bei.extra 
+# -----------------------------------
+
+# ---------------------- L I B R E R I A S ----------------------
+install.packages("spatstat.data")
+install.packages("spatstat.geom")
+install.packages("spatstat.explore")
+install.packages("spatstat.model")
+
+library(spatstat.data)
+library(spatstat.geom)
+library(spatstat.explore)
+library(spatstat.model)
+
+# ----------------- LEER DATA ----------------------------------
+data(bei)
+
+bei.extra <- spatstat.data::bei.extra 
+str(bei.extra)
+
+# ------- EXPLORACIÓN INICIAL: DISTRIBUCIONES -----------------
+
+plot(bei, main = "Distribución espacial de los árboles")
+plot(bei.extra$elev, main = "Elevación del terreno")
+plot(bei.extra$grad, main = "Gradiente de elevación (pendiente)")
+
+# -------- TEST DE ALEATORIEDAD ESPACIAL ------------------------
+test_cuadrante <- quadrat.test(bei, nx = 5, ny = 5)
+print(test_cuadrante)
+plot(test_cuadrante)
+
+K <- Kest(bei)
+plot(K, main = "Función K de Ripley")
+
+set.seed(123)
+K_env <- envelope(bei, Kest, nsim = 99)
+plot(K_env, main = "Función K de Ripley con bandas de simulación")
+
+#--------- ESTIMACIÓN DE LA INTENSIDAD --------------------------
+lambda_kernel <- density(bei)
+plot(lambda_kernel, main = "Intensidad estimada (kernel smoothing)")
+
+modelo_log <- ppm(bei ~ elev + grad, covariates = bei.extra)
+summary(modelo_log)
+plot(predict(modelo_log), main = "Intensidad estimada - modelo paramétrico")
+
+# --------- DIAGNÓSTICO DEL MODELO ------------------------------
+diagnose.ppm(modelo_log)
+Kres <- Kres(modelo_log)
+env_Kres <- envelope(modelo_log, Kres)
+plot(env_Kres)
+
+modelo_1 <- ppm(bei ~ elev, covariates = bei.extra)
+modelo_2 <- ppm(bei ~ grad, covariates = bei.extra)
+anova(modelo_1, modelo_log, test = "Chi")
+simulacion <- rpoispp(modelo_log)
+plot(simulacion)
+
+# ----------- INTERACCIONES Y TRANSFORMACIONES ------------------
+modelo_int <- ppm(bei ~ elev * grad, covariates = bei.extra)
+summary(modelo_int)
+
+modelo_transf <- ppm(bei ~ I(elev^2) + sqrt(grad), covariates = bei.extra)
+summary(modelo_transf)
+
+modelo_full <- ppm(bei ~ I(elev^2) * sqrt(grad), covariates = bei.extra)
+summary(modelo_full)
+
+AIC(modelo_int)
+AIC(modelo_transf)
+AIC(modelo_full)
+
+par(mfrow = c(1, 3))
+diagnose.ppm(modelo_int, main = "Modelo Interacción")
+diagnose.ppm(modelo_transf, main = "Modelo Transformado")
+diagnose.ppm(modelo_full, main = "Modelo Full")
+
+par(mfrow = c(1, 3))
+plot(predict(modelo_int), main = "Intensidad - Interacción")
+plot(predict(modelo_transf), main = "Intensidad - Transformación")
+plot(predict(modelo_full), main = "Intensidad - Full")
+
+logLik(modelo_int)
+logLik(modelo_transf)
+logLik(modelo_full)
+
+# ------------- SIMULACIÓN PARA EL MODELO FULL ------------------
+set.seed(123)
+simulado <- simulate(modelo_full, nsim = 1) 
+
+par(mfrow = c(1, 2))
+plot(bei, main = "Patrón observado")
+plot(simulado[[1]], main = "Simulación del modelo final")
+par(mfrow = c(1, 1))
+\end{lstlisting}
+
+
+% ------------------------
+
+\end{document}

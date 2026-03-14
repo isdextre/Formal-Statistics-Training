@@ -1,0 +1,75 @@
+\section{Definiciones previas}
+
+\subsection{Pruebas post-hoc}
+Sea $X$ un conjunto de datos aleatorios generado bajo un modelo estadístico $\{P_\theta:\theta\in\Theta\}$. 
+Considérese una \emph{familia} de hipótesis nulas
+\[
+\mathcal{H}=\{H_{0,1},H_{0,2},\dots,H_{0,m}\},
+\]
+donde cada $H_{0,i}$ impone una restricción sobre $\theta$ (por ejemplo, igualdad de parámetros entre grupos o independencia entre variables categóricas). 
+
+Un procedimiento de prueba múltiple puede representarse mediante un vector de decisiones
+\[
+\boldsymbol{\delta}(X)=\big(\delta_1(X),\dots,\delta_m(X)\big), 
+\qquad \delta_i(X)\in\{0,1\},
+\]
+donde $\delta_i(X)=1$ indica rechazo de $H_{0,i}$ y $\delta_i(X)=0$ indica no rechazo.
+
+Se denominan \textbf{pruebas post-hoc} a los contrastes aplicados a una familia $\mathcal{H}$ \emph{después} de una etapa previa basada en los datos (por ejemplo, un contraste global o un análisis exploratorio) que motiva investigar \emph{hipótesis específicas} dentro de $\mathcal{H}$. 
+
+
+\subsection{Falso positivo}
+Considérese una única hipótesis nula $H_0$ con espacio paramétrico nulo $\Theta_0\subseteq\Theta$ y una regla de decisión $\delta(X)\in\{0,1\}$, donde $\delta(X)=1$ denota el rechazo de $H_0$.
+
+Un \textbf{falso positivo} ocurre cuando el procedimiento rechaza una hipótesis nula que es verdadera. Formalmente, el evento de falso positivo es
+\[
+\{\delta(X)=1\}\cap\{\theta\in\Theta_0\}.
+\]
+La probabilidad de falso positivo (error tipo I) bajo el parámetro $\theta$ es
+\[
+P_\theta\big(\delta(X)=1\big), \qquad \theta\in\Theta_0.
+\]
+
+El \textbf{tamaño} (o \emph{size}) de una prueba es la \emph{máxima} probabilidad de cometer un falso positivo cuando la hipótesis nula es verdadera. Para definirlo formalmente, sea $\Theta_0$ el conjunto de valores del parámetro $\theta$ para los cuales $H_0$ es cierta. Entonces, para cada $\theta\in\Theta_0$ existe una probabilidad de rechazar $H_0$ aun siendo verdadera:
+\[
+P_\theta\big(\delta(X)=1\big).
+\]
+Como dicha probabilidad puede cambiar según el valor específico de $\theta$ dentro de $\Theta_0$, se toma el peor caso (el más grande) sobre todos los escenarios compatibles con $H_0$. A esa máxima probabilidad se le llama \textbf{tamaño}:
+\[
+\alpha \;=\;\sup_{\theta\in\Theta_0} P_\theta\big(\delta(X)=1\big).
+\]
+
+\textbf{Interpretación de $\sup$ (supremo).} El símbolo $\sup$ significa \emph{supremo} o \emph{cota superior mínima}. En este contexto, puede leerse como:
+\[
+\sup_{\theta\in\Theta_0} P_\theta(\delta(X)=1) \;=\; \text{``la mayor probabilidad posible de rechazar $H_0$ cuando $H_0$ es verdadera''}.
+\]
+Si esa mayor probabilidad se alcanza en algún valor $\theta^\star\in\Theta_0$, entonces el supremo coincide con un máximo:
+\[
+\sup_{\theta\in\Theta_0} P_\theta(\delta(X)=1)=\max_{\theta\in\Theta_0} P_\theta(\delta(X)=1).
+\]
+Si no se alcanza exactamente, el supremo sigue representando el límite superior más ajustado (la mejor cota superior).
+
+\textbf{Interpretación de $\alpha$.} Decir que una prueba es de \emph{nivel} $\alpha$ significa que, bajo cualquier situación en la que $H_0$ sea verdadera (es decir, para todo $\theta\in\Theta_0$),
+\[
+P_\theta\big(\delta(X)=1\big)\le \alpha.
+\]
+En palabras: \emph{aunque el valor real de $\theta$ bajo $H_0$ sea el peor posible, la probabilidad de falso positivo no excede $\alpha$.}
+Por ejemplo, si $\alpha=0.05$, la prueba está construida para que la probabilidad de rechazar $H_0$ cuando es cierta sea, en el peor caso, como máximo $5\%$.
+
+\subsection{Family-Wise Error Rate (FWER)}
+Sea $\mathcal{H}=\{H_{0,1},\dots,H_{0,m}\}$ una familia de hipótesis y $\boldsymbol{\delta}(X)=(\delta_1(X),\dots,\delta_m(X))$ el vector de decisiones asociado. 
+Defínase el conjunto de índices de hipótesis nulas verdaderas como
+\[
+I_0 \subseteq \{1,\dots,m\}.
+\]
+El evento ``cometer al menos un falso positivo dentro de la familia'' es
+\[
+\bigcup_{i\in I_0}\{\delta_i(X)=1\}.
+\]
+El \textbf{Family-Wise Error Rate (FWER)} se define como
+\[
+\mathrm{FWER}
+\;=\;
+P\!\left(\bigcup_{i\in I_0}\{\delta_i(X)=1\}\right).
+\]
+En términos conceptuales, $\mathrm{FWER}$ es la probabilidad de realizar \emph{al menos un} rechazo incorrecto (error tipo I) dentro del conjunto de comparaciones.

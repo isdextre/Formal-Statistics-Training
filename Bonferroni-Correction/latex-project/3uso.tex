@@ -1,0 +1,28 @@
+\section{¿Cuándo usar la regla de Bonferroni?}
+
+El objetivo de usar la regla de Bonferroni es evitar los falsos positivos al hacer muchas pruebas a la vez (controlar el FWER)
+
+\[
+\mathrm{FWER}=P\!\left(\text{rechazar al menos una hip\'otesis nula verdadera}\right)\le \alpha.
+\]
+
+por lo que se contrastan simult\'aneamente una familia de $m$ hip\'otesis $\mathcal{H}=\{H_{0,1},\dots,H_{0,m}\}$ 
+
+
+En resumen, Bonferroni es apropiada cuando se desea reducir falsos positivos (errores tipo I) en múltiples hipótesis.
+
+\paragraph{Cuándo Bonferroni es ideal}
+\begin{itemize}
+    \item \textbf{Pruebas post-hoc}: despu\'es de un contraste global (por ejemplo, $\chi^2$, ANOVA, Kruskal--Wallis), cuando se realizan m\'ultiples comparaciones para identificar qu\'e grupos/categor\'ias explican la diferencia global.
+    \item \textbf{An\'alisis confirmatorio}: cuando se tiene un conjunto \emph{predefinido} de hip\'otesis (pocas a moderadas) y se busca conclusiones robustas.
+    \item \textbf{Contextos de alto costo de error tipo I}: cuando declarar una asociaci\'on o diferencia inexistente es particularmente problem\'atico (p.\ ej., informes formales, decisiones cl\'inicas/sanitarias, conclusiones regulatorias).
+    \item \textbf{Cuando no se tiene independencia de pruebas}: Bonferroni es f\'acil de aplicar y su validez no requiere independencia entre pruebas, por lo que es un ajuste estándar.
+\end{itemize}
+
+\paragraph{Cu\'ando Bonferroni puede NO ser ideal.}
+\begin{itemize}
+    \item \textbf{Cuando $m$ es grande}: Al ser m muy grande, $\alpha/m$ tiende a 0, entonces para que algo sea significativo se necesitarían p-values extremadamente pequeños también, al ser demasiado restrictivo los casos de falsos negativos aumentarían
+    
+    \item \textbf{En an\'alisis exploratorio}: si el objetivo es detectar se\~nales entre muchas hip\'otesis, suele preferirse controlar otras medidas (p.\ ej., FDR) o usar ajustes menos conservadores.
+\end{itemize}
+

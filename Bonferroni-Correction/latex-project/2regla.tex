@@ -1,0 +1,110 @@
+\section{Correcci\'on de Bonferroni}
+
+Consid\'erese una familia de $m$ hip\'otesis nulas
+\[
+\mathcal{H}=\{H_{0,1},H_{0,2},\dots,H_{0,m}\},
+\]
+y un conjunto de pruebas individuales (una por hip\'otesis) con reglas de decisi\'on $\delta_i(X)\in\{0,1\}$, donde $\delta_i(X)=1$ indica rechazo de $H_{0,i}$.
+
+Sea $I_0\subseteq\{1,\dots,m\}$ el conjunto de \'indices de las hip\'otesis nulas verdaderas. El evento \emph{``cometer al menos un falso positivo''} es
+\[
+\bigcup_{i\in I_0}\{\delta_i(X)=1\}.
+\]
+Por definici\'on, el \textbf{Family-Wise Error Rate (FWER)} es
+\[
+\mathrm{FWER}
+=
+P\!\left(\bigcup_{i\in I_0}\{\delta_i(X)=1\}\right).
+\]
+
+La correcci\'on de Bonferroni se basa en la \textbf{desigualdad de Boole} (o desigualdad de la uni\'on), que establece que para eventos $A_1,\dots,A_k$,
+\[
+P\!\left(\bigcup_{j=1}^k A_j\right)\le \sum_{j=1}^k P(A_j).
+\]
+Aplicando esta desigualdad a los eventos $A_i=\{\delta_i(X)=1\}$ para $i\in I_0$, se obtiene:
+\[
+\mathrm{FWER}
+=
+P\!\left(\bigcup_{i\in I_0}\{\delta_i(X)=1\}\right)
+\le
+\sum_{i\in I_0} P\big(\delta_i(X)=1\big).
+\]
+
+\paragraph{Regla de Bonferroni}
+Si cada prueba individual se construye de modo que, para todo $\theta\in\Theta_{0,i}$,
+\[
+P_\theta\big(\delta_i(X)=1\big)\le \frac{\alpha}{m},
+\qquad i=1,\dots,m,
+\]
+entonces se garantiza que
+\[
+\mathrm{FWER}\le \alpha
+\]
+para cualquier configuraci\'on de hip\'otesis nulas verdaderas (control fuerte).
+
+\paragraph{Implementaci\'on pr\'actica (umbral ajustado).}
+La regla anterior se implementa com\'unmente usando un nivel por-prueba
+\[
+\alpha^\star=\frac{\alpha}{m},
+\]
+y declarando significativo el contraste $i$ si su p-valor satisface
+\[
+p_i < \alpha^\star.
+\]
+
+\subsection{Forma equivalente (p-valores ajustados).}
+
+La correcci\'on de Bonferroni puede implementarse de dos maneras equivalentes:
+
+\begin{enumerate}
+    \item \textbf{(Umbral ajustado)} Mantener los p-valores originales $p_i$ y comparar cada uno con un nivel por-prueba
+    \[
+    \alpha^\star=\frac{\alpha}{m},
+    \]
+    rechazando $H_{0,i}$ si $p_i<\alpha^\star$.
+
+    \item \textbf{(p-valores ajustados)} Mantener el nivel global $\alpha$ (por ejemplo, $0.05$) y transformar cada p-valor $p_i$ en un \emph{p-valor ajustado} $p_i^{\mathrm{adj}}$, para luego decidir con la regla usual: rechazar si $p_i^{\mathrm{adj}}<\alpha$.
+\end{enumerate}
+
+\paragraph{Derivaci\'on de la equivalencia.}
+Partimos de la regla de Bonferroni en su forma de umbral ajustado:
+\[
+p_i < \frac{\alpha}{m}.
+\]
+Como $m>0$, al multiplicar ambos lados por $m$ se obtiene una desigualdad equivalente:
+\[
+m\,p_i < \alpha.
+\]
+Esto sugiere definir el p-valor ajustado como
+\[
+p_i^{\mathrm{adj}} = m\,p_i,
+\]
+de modo que la condici\'on de rechazo se escriba de la forma habitual:
+\[
+p_i^{\mathrm{adj}} < \alpha.
+\]
+Por lo tanto, decidir con $p_i<\alpha/m$ es exactamente lo mismo que decidir con $m p_i<\alpha$.
+
+\paragraph{Por qu\'e se usa $\min\{1,\,m p_i\}$.}
+Un p-valor, por definici\'on, debe pertenecer al intervalo $[0,1]$. Sin embargo, al multiplicar por $m$ puede ocurrir que $m p_i>1$ (por ejemplo, si $p_i=0.30$ y $m=10$, entonces $m p_i=3$). Para conservar la interpretaci\'on de ``p-valor'', se recorta el resultado a lo m\'aximo posible:
+\[
+p_i^{\mathrm{adj}}=\min\{1,\,m\,p_i\}.
+\]
+En consecuencia:
+\[
+p_i^{\mathrm{adj}}=
+\begin{cases}
+m\,p_i, & \text{si } m\,p_i\le 1,\\[4pt]
+1, & \text{si } m\,p_i>1.
+\end{cases}
+\]
+
+\paragraph{Regla de decisi\'on con p-valores ajustados.}
+Una vez calculado $p_i^{\mathrm{adj}}$, se rechaza $H_{0,i}$ si
+\[
+p_i^{\mathrm{adj}}<\alpha.
+\]
+Esta regla produce \emph{exactamente las mismas decisiones} que comparar $p_i$ con $\alpha/m$.
+
+\paragraph{Interpretaci\'on de $p_i^{\mathrm{adj}}$.}
+El valor $p_i^{\mathrm{adj}}$ puede interpretarse como el \emph{nivel global m\'inimo} (en t\'erminos de FWER bajo Bonferroni) al cual el contraste $i$ resultar\'ia significativo. Por ejemplo, si $p_i^{\mathrm{adj}}=0.04$, entonces la comparaci\'on $i$ ser\'ia significativa bajo Bonferroni para cualquier $\alpha\ge 0.04$, y en particular para $\alpha=0.05$.

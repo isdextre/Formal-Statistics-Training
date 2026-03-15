@@ -10,6 +10,7 @@ This repository serves as a structured record of my statistical training, combin
 | [descriptive-statistics](./descriptive-statistics) | Foundational teaching material | Introductory slides designed to explain essential descriptive statistics. |
 | [hyperparameter-optimization-poster](./hyperparameter-optimization-poster) | Scientific communication | Self-developed academic poster summarizing hyperparameter optimization methods in machine learning. |
 | [probability-distributions](./probability-distributions) | Probability foundations and exposition | Slides developed for academic exposition on discrete and continuous probability distributions, including normal distribution and standardization. |
+| [SAE-and-Fay-Herriot-model](./SAE-and-Fay-Herriot-model) | Small area estimation foundations | Study material in LaTeX and PDF format introducing Small Area Estimation and the classical Fay--Herriot model, including mathematical formulation, area-level prediction, and predictor precision. |
 
 ## Repository Purpose
 

@@ -1,0 +1,140 @@
+\section{Modelo clásico de Fay--Herriot}
+
+\subsection{Estructura en dos niveles}
+
+El modelo clásico de Fay--Herriot se construye mediante dos ecuaciones.
+
+\subsubsection{Nivel 1: modelo de muestreo}
+
+\[
+y_i = \theta_i + e_i,
+\qquad i=1,\dots,m,
+\]
+donde:
+\begin{itemize}
+    \item $y_i$ es el estimador directo,
+    \item $\theta_i$ es el verdadero parámetro del área,
+    \item $e_i$ es el error de muestreo.
+\end{itemize}
+
+Se asume que
+\[
+e_i \sim N(0,D_i),
+\]
+y además que los errores de muestreo son independientes:
+\[
+e_i \perp e_j \qquad \text{si } i \neq j.
+\]
+
+Este primer nivel modela la incertidumbre proveniente del diseño muestral.
+
+\subsubsection{Nivel 2: modelo de enlace}
+
+\[
+\theta_i = x_i^{\top}\beta + u_i,
+\]
+donde:
+\begin{itemize}
+    \item $x_i \in \mathbb{R}^{p}$ es el vector de covariables del área $i$,
+    \item $\beta \in \mathbb{R}^{p}$ es el vector de parámetros fijos,
+    \item $u_i$ es un efecto aleatorio de área.
+\end{itemize}
+
+Se asume que
+\[
+u_i \sim N(0,A),
+\]
+con
+\[
+u_i \perp u_j \qquad \text{si } i \neq j.
+\]
+
+También se supone independencia entre errores de muestreo y efectos aleatorios:
+\[
+e_i \perp u_j \qquad \forall i,j.
+\]
+
+\subsection{Modelo combinado}
+
+Sustituyendo $\theta_i = x_i^{\top}\beta + u_i$ en $y_i = \theta_i + e_i$, obtenemos
+\[
+y_i = x_i^{\top}\beta + u_i + e_i.
+\]
+
+Este es el \textbf{modelo clásico de Fay--Herriot}.
+
+\subsection{Distribución marginal de $y_i$}
+
+Como
+\[
+u_i \sim N(0,A), 
+\qquad
+e_i \sim N(0,D_i),
+\]
+e independientes, entonces
+\[
+y_i \sim N(x_i^{\top}\beta,\; A + D_i).
+\]
+
+Por lo tanto,
+\[
+E(y_i)=x_i^{\top}\beta,
+\qquad
+\operatorname{Var}(y_i)=A+D_i.
+\]
+
+\section{Forma matricial}
+
+Definamos
+\[
+y=
+\begin{pmatrix}
+y_1\\
+\vdots\\
+y_m
+\end{pmatrix},
+\qquad
+X=
+\begin{pmatrix}
+x_1^{\top}\\
+\vdots\\
+x_m^{\top}
+\end{pmatrix},
+\qquad
+u=
+\begin{pmatrix}
+u_1\\
+\vdots\\
+u_m
+\end{pmatrix},
+\qquad
+e=
+\begin{pmatrix}
+e_1\\
+\vdots\\
+e_m
+\end{pmatrix}.
+\]
+
+Entonces el modelo se escribe como
+\[
+y = X\beta + u + e.
+\]
+
+Con
+\[
+u \sim N(0,\; A I_m),
+\qquad
+e \sim N(0,\; D),
+\]
+donde
+\[
+D = \operatorname{diag}(D_1,\dots,D_m).
+\]
+
+Así, marginalmente,
+\[
+y \sim N(X\beta,\; V),
+\qquad
+V = A I_m + D.
+\]

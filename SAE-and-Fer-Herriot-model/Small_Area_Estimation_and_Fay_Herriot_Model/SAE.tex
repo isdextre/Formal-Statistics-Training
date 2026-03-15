@@ -1,0 +1,50 @@
+\section{¿Qué resuelve SAE?}
+
+La Estimación en Áreas Pequeñas (Small Area Estimation, SAE) surge cuando se desea estimar un parámetro de interés para dominios muy desagregados, por ejemplo: Distritos, minicipios, etc.
+\\
+El problema es que en esos dominios, el tamaño muestral suele ser pequeño. Como consecuencia, los estimadores directos basados únicamente en la encuesta presentan alta variabilidad y baja precisión, incluso pueden no existir para algunas áreas no muestreadas.
+\\
+Formalmente, si $\theta_i$ representa el parámetro de interés del área $i$, y $\hat{\theta}_i^{\,D}$ su estimador directo, entonces el problema típico en SAE es que
+\[
+\operatorname{Var}\!\left(\hat{\theta}_i^{\,D}\right)
+\]
+puede ser grande cuando el tamaño muestral del área $i$ es pequeño.
+
+\section{Formulación del problema}
+
+Sea $i=1,\dots,m$ el índice de áreas pequeñas. Para cada área $i$, queremos estimar un parámetro $\theta_i$, por ejemplo una media, una proporción, una tasa o un índice de pobreza.
+
+Disponemos de un estimador directo $y_i$, que aproxima a $\theta_i$. En SAE suele escribirse
+\[
+y_i = \hat{\theta}_i^{\,D}.
+\]
+
+Este estimador directo satisface, de manera aproximada,
+\[
+E(y_i \mid \theta_i) \approx \theta_i,
+\qquad
+\operatorname{Var}(y_i \mid \theta_i) = D_i,
+\]
+
+
+El gran problema es que cuando $D_i$ es grande, el estimador directo es inestable y poco confiable.
+
+\section{SAE}
+ SAE suele dividirse en dos grandes familias.
+
+\subsection{Modelos a nivel unidad}
+
+Trabajan con microdatos, es decir, con observaciones individuales $y_{ij}$.
+
+\subsection{Modelos a nivel área}
+
+Trabajan con un resumen por área:
+\begin{itemize}
+    \item un estimador directo $y_i$,
+    \item su varianza $D_i$,
+    \item covariables agregadas $x_i$.
+\end{itemize}
+
+El modelo clásico de Fay--Herriot pertenece a esta segunda familia.
+
+

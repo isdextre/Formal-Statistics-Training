@@ -1,0 +1,402 @@
+\section{Predicción del parámetro de área}
+
+En el modelo clásico de Fay--Herriot, el objetivo principal no es estimar únicamente el vector de parámetros fijos $\beta$, sino \textbf{predecir el verdadero parámetro de interés del área} $i$, denotado por $\theta_i$.
+
+Recordemos que el modelo se especifica en dos niveles:
+\[
+y_i=\theta_i+e_i, \qquad e_i\sim N(0,D_i),
+\]
+\[
+\theta_i=x_i^{\top}\beta+u_i, \qquad u_i\sim N(0,A),
+\]
+con independencia entre $e_i$ y $u_i$.
+
+Sustituyendo la segunda ecuación en la primera, obtenemos la forma combinada del modelo:
+\[
+y_i=x_i^{\top}\beta+u_i+e_i.
+\]
+
+Por lo tanto, el problema de predicción consiste en construir un predictor adecuado de $\theta_i$ a partir de la información observada $y_i$.
+
+\subsection{¿Qué necesitamos para la predicción?}
+
+Para derivar el predictor de $\theta_i$, primero necesitamos calcular:
+\[
+E(\theta_i), \qquad E(y_i), \qquad \operatorname{Cov}(\theta_i,y_i), \qquad \operatorname{Var}(y_i).
+\]
+
+\subsubsection*{Esperanza de $\theta_i$}
+
+Como
+\[
+\theta_i=x_i^{\top}\beta+u_i,
+\]
+y $x_i^{\top}\beta$ es una cantidad fija (no aleatoria), entonces
+\[
+E(\theta_i)=E(x_i^{\top}\beta+u_i)=x_i^{\top}\beta+E(u_i).
+\]
+Dado que
+\[
+u_i\sim N(0,A),
+\]
+se tiene $E(u_i)=0$, y por tanto
+\[
+E(\theta_i)=x_i^{\top}\beta.
+\]
+
+\subsubsection*{Esperanza de $y_i$}
+
+Usando la forma combinada
+\[
+y_i=x_i^{\top}\beta+u_i+e_i,
+\]
+tenemos
+\[
+E(y_i)=E(x_i^{\top}\beta+u_i+e_i)=x_i^{\top}\beta+E(u_i)+E(e_i).
+\]
+Como
+\[
+E(u_i)=0, \qquad E(e_i)=0,
+\]
+resulta que
+\[
+E(y_i)=x_i^{\top}\beta.
+\]
+
+\subsubsection*{Covarianza entre $\theta_i$ y $y_i$}
+
+Ahora calculemos
+\[
+\operatorname{Cov}(\theta_i,y_i).
+\]
+Sustituyendo las expresiones de $\theta_i$ y $y_i$,
+\[
+\
+\operatorname{Cov}(x_i^{\top}\beta+u_i,\;x_i^{\top}\beta+u_i+e_i)
+\]
+
+\[
+\
+\operatorname{Cov}(x_i^{\top}\beta,x_i^{\top}\beta)
++\operatorname{Cov}(x_i^{\top}\beta,u_i)
++\operatorname{Cov}(x_i^{\top}\beta,e_i)
++\operatorname{Cov}(u_i,x_i^{\top}\beta)
++\operatorname{Cov}(u_i,u_i)
++\operatorname{Cov}(u_i,e_i).
+\]
+
+
+
+Usamos las siguientes propiedades de la covarianza:
+\begin{itemize}
+    \item la covarianza de una constante con cualquier variable aleatoria es cero;
+    \item la covarianza es bilineal;
+    \item si dos variables son independientes, su covarianza es cero.
+\end{itemize}
+
+Entonces,
+\[
+\operatorname{Cov}(x_i^{\top}\beta+u_i,\;x_i^{\top}\beta+u_i+e_i)
+=
+\operatorname{Cov}(u_i,u_i)+\operatorname{Cov}(u_i,e_i),
+\]
+porque todos los términos que involucran la constante $x_i^{\top}\beta$ desaparecen.
+
+Además, como $u_i$ y $e_i$ son independientes,
+\[
+\operatorname{Cov}(u_i,e_i)=0.
+\]
+Y como
+\[
+\operatorname{Cov}(u_i,u_i)=\operatorname{Var}(u_i)=A,
+\]
+obtenemos
+\[
+\operatorname{Cov}(\theta_i,y_i)=A.
+\]
+
+\subsubsection*{Varianza de $y_i$}
+
+Partimos de
+\[
+y_i=x_i^{\top}\beta+u_i+e_i.
+\]
+Entonces
+\[
+\operatorname{Var}(y_i)=\operatorname{Var}(x_i^{\top}\beta+u_i+e_i).
+\]
+
+Usamos ahora la fórmula general
+\[
+\operatorname{Var}(X+Y)=\operatorname{Var}(X)+\operatorname{Var}(Y)+2\operatorname{Cov}(X,Y),
+\]
+y su extensión a más de dos términos. Como $x_i^{\top}\beta$ es constante, su varianza es cero. Por tanto,
+\[
+\operatorname{Var}(y_i)=\operatorname{Var}(u_i)+\operatorname{Var}(e_i)+2\operatorname{Cov}(u_i,e_i).
+\]
+
+Por independencia,
+\[
+\operatorname{Cov}(u_i,e_i)=0.
+\]
+Además,
+\[
+\operatorname{Var}(u_i)=A, \qquad \operatorname{Var}(e_i)=D_i.
+\]
+Así,
+\[
+\operatorname{Var}(y_i)=A+D_i.
+\]
+
+En resumen, hemos obtenido las cuatro cantidades clave:
+\[
+E(\theta_i)=x_i^{\top}\beta,
+\qquad
+E(y_i)=x_i^{\top}\beta,
+\qquad
+\operatorname{Cov}(\theta_i,y_i)=A,
+\qquad
+\operatorname{Var}(y_i)=A+D_i.
+\]
+
+\subsection{Obtención de la esperanza condicional \(E(\theta_i\mid y_i)\)}
+
+Bajo el modelo normal, el vector aleatorio
+\[
+\begin{pmatrix}
+\theta_i\\
+y_i
+\end{pmatrix}
+\]
+tiene distribución normal bivariada. Para variables conjuntamente normales, la esperanza condicional viene dada por la fórmula general:
+\[
+E(U\mid V)
+=
+E(U)+\operatorname{Cov}(U,V)\operatorname{Var}(V)^{-1}\bigl(V-E(V)\bigr).
+\]
+
+Aplicando esta fórmula con
+\[
+U=\theta_i,
+\qquad
+V=y_i,
+\]
+obtenemos
+\[
+E(\theta_i\mid y_i)
+=
+E(\theta_i)
++
+\operatorname{Cov}(\theta_i,y_i)\operatorname{Var}(y_i)^{-1}\bigl(y_i-E(y_i)\bigr).
+\]
+
+Ahora sustituimos, paso a paso, los resultados ya calculados:
+\[
+E(\theta_i\mid y_i)
+=
+x_i^{\top}\beta
++
+A(A+D_i)^{-1}\bigl(y_i-x_i^{\top}\beta\bigr).
+\]
+
+Como en este caso todo es escalar, podemos escribir
+\[
+(A+D_i)^{-1}=\frac{1}{A+D_i},
+\]
+de modo que
+\[
+E(\theta_i\mid y_i)
+=
+x_i^{\top}\beta
++
+\frac{A}{A+D_i}\bigl(y_i-x_i^{\top}\beta\bigr).
+\]
+
+Distribuyendo el factor,
+\[
+E(\theta_i\mid y_i)
+=
+x_i^{\top}\beta
++
+\frac{A}{A+D_i}y_i
+-
+\frac{A}{A+D_i}x_i^{\top}\beta.
+\]
+
+Agrupando los términos que multiplican a $x_i^{\top}\beta$,
+\[
+E(\theta_i\mid y_i)
+=
+\frac{A}{A+D_i}y_i
++
+\left(1-\frac{A}{A+D_i}\right)x_i^{\top}\beta.
+\]
+
+Definiendo
+\[
+\gamma_i=\frac{A}{A+D_i},
+\]
+obtenemos
+\[
+\tilde{\theta}_i
+=
+E(\theta_i\mid y_i)
+=
+\gamma_i y_i + (1-\gamma_i)x_i^{\top}\beta.
+\]
+
+Esta expresión muestra que el predictor de $\theta_i$ es una combinación ponderada entre:
+\begin{itemize}
+    \item el estimador directo $y_i$;
+    \item la parte explicada por el modelo $x_i^{\top}\beta$.
+\end{itemize}
+
+\subsection{Interpretación del factor de encogimiento}
+
+El término
+\[
+\gamma_i=\frac{A}{A+D_i}
+\]
+se denomina \textbf{factor de encogimiento} o \textit{shrinkage factor}.
+
+Su interpretación es inmediata:
+
+\paragraph{Si $D_i$ es pequeño.}
+Cuando la varianza muestral del estimador directo es baja, el estimador directo es preciso. En ese caso,
+\[
+\gamma_i \approx 1,
+\]
+y por tanto
+\[
+\tilde{\theta}_i \approx y_i.
+\]
+Es decir, la predicción se apoya principalmente en la información directa de la encuesta.
+
+\paragraph{Si $D_i$ es grande.}
+Cuando la varianza muestral es alta, el estimador directo es muy ruidoso. En ese caso,
+\[
+\gamma_i \approx 0,
+\]
+y entonces
+\[
+\tilde{\theta}_i \approx x_i^{\top}\beta.
+\]
+Es decir, la predicción se apoya más en la estructura del modelo.
+
+Así, el estimador de Fay--Herriot ajusta automáticamente el peso dado al estimador directo según la precisión muestral del área.
+
+\subsection{¿Qué es el BLUP?}
+
+Hasta ahora hemos obtenido
+\[
+E(\theta_i\mid y_i)
+=
+x_i^{\top}\beta
++
+\frac{A}{A+D_i}\bigl(y_i-x_i^{\top}\beta\bigr),
+\]
+suponiendo conocidos $\beta$ y $A$.
+
+Sin embargo, en la práctica $\beta$ casi nunca es conocido. Por ello, debemos estimarlo a partir de los datos. Si $A$ se considera conocido, entonces la matriz de covarianza marginal de $y$ es
+\[
+V=AI_m+D,
+\]
+y el estimador natural de $\beta$ es el estimador de mínimos cuadrados generalizados:
+\[
+\hat{\beta}(A)=
+(X^{\top}V^{-1}X)^{-1}X^{\top}V^{-1}y.
+\]
+
+Al reemplazar $\beta$ por $\hat{\beta}(A)$ en el predictor anterior, obtenemos
+\[
+\tilde{\theta}_i(A)
+=
+x_i^{\top}\hat{\beta}(A)
++
+\gamma_i\bigl(y_i-x_i^{\top}\hat{\beta}(A)\bigr),
+\qquad
+\gamma_i=\frac{A}{A+D_i}.
+\]
+
+Equivalentemente,
+\[
+\tilde{\theta}_i(A)
+=
+\gamma_i y_i + (1-\gamma_i)x_i^{\top}\hat{\beta}(A).
+\]
+
+A este predictor se le llama \textbf{BLUP} (\textit{Best Linear Unbiased Predictor}).
+
+\paragraph{¿Por qué se llama BLUP?}
+Se llama así porque, dentro de la clase de predictores:
+\begin{itemize}
+    \item lineales en los datos observados,
+    \item insesgados bajo el modelo,
+\end{itemize}
+es el que minimiza el error cuadrático medio de predicción cuando $A$ es conocido.
+
+En otras palabras, el BLUP es la versión ``óptima'' del predictor lineal insesgado bajo el modelo de Fay--Herriot con componente de varianza conocida.
+
+\subsection{¿Qué es el EBLUP?}
+
+En aplicaciones reales, el problema es que $A$ tampoco es conocido. Por tanto, no podemos calcular exactamente ni
+\[
+\gamma_i=\frac{A}{A+D_i},
+\]
+ni
+\[
+\hat{\beta}(A).
+\]
+
+La solución consiste en estimar $A$ a partir de los datos, obteniendo un valor $\hat A$ mediante procedimientos como máxima verosimilitud (ML) o máxima verosimilitud restringida (REML).
+
+Una vez obtenido $\hat A$, reemplazamos $A$ por $\hat A$ en todas las expresiones anteriores:
+\[
+\hat{\gamma}_i=\frac{\hat A}{\hat A+D_i},
+\]
+\[
+\hat{\beta}(\hat A)=
+(X^{\top}\hat V^{-1}X)^{-1}X^{\top}\hat V^{-1}y,
+\qquad
+\hat V=\hat A I_m+D.
+\]
+
+Entonces el predictor queda
+\[
+\hat{\theta}_i^{EBLUP}
+=
+x_i^{\top}\hat{\beta}(\hat A)
++
+\hat{\gamma}_i\bigl(y_i-x_i^{\top}\hat{\beta}(\hat A)\bigr).
+\]
+
+Equivalentemente,
+\[
+\hat{\theta}_i^{EBLUP}
+=
+\hat{\gamma}_i y_i + (1-\hat{\gamma}_i)x_i^{\top}\hat{\beta}(\hat A).
+\]
+
+A este predictor se le denomina \textbf{EBLUP} (\textit{Empirical Best Linear Unbiased Predictor}).
+
+\paragraph{¿En qué se diferencia del BLUP?}
+La diferencia esencial es la siguiente:
+\begin{itemize}
+    \item el \textbf{BLUP} asume conocido el componente de varianza $A$;
+    \item el \textbf{EBLUP} reemplaza ese valor desconocido por un estimador $\hat A$.
+\end{itemize}
+
+Por eso se le llama \textit{empirical}: porque ya no usa el valor teórico verdadero de $A$, sino una estimación obtenida empíricamente a partir de los datos.
+
+\subsection{Conclusiones}
+
+La predicción del parámetro de área en Fay--Herriot no consiste ni en copiar el estimador directo ni en sustituirlo por una simple regresión. Lo que hace el modelo es \textbf{combinar de manera óptima la información directa y la información auxiliar}.
+
+Así, el predictor final:
+\begin{itemize}
+    \item conserva la información específica del área mediante $y_i$;
+    \item estabiliza la estimación mediante $x_i^{\top}\beta$;
+    \item y ajusta automáticamente el peso de cada componente según la precisión muestral del área.
+\end{itemize}
+
+Esta es la razón por la cual el modelo de Fay--Herriot produce estimaciones más estables que las estimaciones directas cuando se trabaja con áreas pequeñas.

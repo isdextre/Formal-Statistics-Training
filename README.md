@@ -18,4 +18,6 @@ I created this repository as a structured space to document part of my statistic
 
 Through this repository, I aim to strengthen my theoretical foundations, organize my learning process, and communicate technical ideas in a clear and rigorous way.
 
-I will continue expanding it with new materials as I progress in my training. I hope these resources can also be useful to other students and learners.
+I will continue expanding it with new materials as I progress in my training. I hope these resources can also be useful to other students and learners
+
+.

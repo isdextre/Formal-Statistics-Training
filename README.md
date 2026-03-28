@@ -1,4 +1,4 @@
-# Formal Statistics Training .
+# Formal Statistics Training 
 
 This repository serves as a structured record of my statistical training, combining theoretical revision, instructional materials, presentation slides, and self-developed academic summaries.
 
